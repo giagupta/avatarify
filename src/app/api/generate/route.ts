@@ -79,29 +79,30 @@ export async function POST(request: Request) {
 
     // Now generate the avatar with DALL-E
     console.log('Generating avatar with DALL-E...');
-    const prompt = `Create a Notion-style avatar illustration based on this person's description: ${description}
+    const prompt = `Create an EXTREMELY MINIMALIST Notion-style avatar illustration based on this person's description: ${description}
 
 STYLE REQUIREMENTS (EXTREMELY IMPORTANT):
-1. Pure black and white illustration with NO gray tones, NO highlights, and NO shading
+1. ULTRA-MINIMALIST black and white illustration with ABSOLUTELY NO shading, NO gray tones, NO highlights
 2. ABSOLUTELY NO BORDERS OR FRAMES around the avatar - just the face/head on white background
 3. Specific Notion-style facial features:
-   - Eyes: simple curved lines or small ovals, never large cartoon eyes
-   - Eyebrows: thin, simple lines
-   - Nose: minimal representation or often omitted entirely
+   - Eyes: extremely simple curved lines or tiny dots, never cartoon-like or anime eyes
+   - Eyebrows: very thin, simple lines or omitted entirely
+   - Nose: extremely minimal or completely omitted
    - Mouth: simple curved line for smile or neutral expression
-4. Hair must be solid black with NO internal lines, NO highlights, and NO texture details
-5. If glasses present, use thin, simple lines
-6. Just show head and possibly neck/shoulders - no full body
+4. Hair must be COMPLETELY SOLID BLACK with NO internal lines, NO highlights, NO texture details, NO strands
+5. If glasses present, use the thinnest possible lines
+6. Just show head and possibly minimal neck - no shoulders or body
 7. Clean white background with absolutely no borders, frames, or decorative elements
+8. NOT CUTE or KAWAII style - must be clean, professional, and minimalist
 
-The avatar must look EXACTLY like the authentic Notion avatars - clean, simple black and white illustrations with minimal details. Create just ONE avatar centered in the frame.
+The avatar must look EXACTLY like the authentic Notion avatars - ultra-clean, extremely simple black and white illustrations with minimal details. Create just ONE avatar centered in the frame.
 
-Reference style: Simple black and white head illustrations with minimal facial features, solid black hair with no highlights, and clean white backgrounds with no frames.`;
+Reference style: Ultra-minimalist black and white head illustrations with barely-there facial features, completely solid black hair with zero internal details, and clean white backgrounds with no frames.`;
     
     console.log('DALL-E prompt:', prompt);
 
-    // Add a final reminder about no borders or frames
-    const finalPrompt = `${prompt}\n\nFINAL CRITICAL INSTRUCTIONS:\n1. The background MUST be pure white (#FFFFFF) with NO borders, frames, or backgrounds of any kind.\n2. The avatar must be just the head/face floating on a white background.\n3. DO NOT add any decorative elements, borders, or frames.\n4. Hair must be solid black with no internal lines or highlights.\n5. Facial features must be extremely minimal - simple lines for eyes and mouth.`;
+    // Add a final reminder about no borders or frames and extreme minimalism
+    const finalPrompt = `${prompt}\n\nFINAL CRITICAL INSTRUCTIONS:\n1. The background MUST be pure white (#FFFFFF) with NO borders, frames, or backgrounds of any kind.\n2. The avatar must be just the head/face floating on a white background.\n3. DO NOT add any decorative elements, borders, or frames.\n4. Hair must be COMPLETELY SOLID BLACK with ABSOLUTELY NO internal lines, NO highlights, NO texture, NO strands.\n5. Facial features must be EXTREMELY minimal - barely-there lines for eyes and mouth.\n6. NOT anime style, NOT kawaii, NOT cute - must be clean, professional, and EXTREMELY minimalist.\n7. Think of the simplest possible representation that still conveys the person.`;
     
     console.log('Final prompt:', finalPrompt);
     
@@ -112,7 +113,7 @@ Reference style: Simple black and white head illustrations with minimal facial f
       size: '1024x1024',
       response_format: 'url',
       quality: 'standard',
-      style: 'vivid'
+      style: 'natural' // Changed from 'vivid' to 'natural' for a more minimalist look
     });
 
     if (!imageResponse.data?.[0]?.url) {
