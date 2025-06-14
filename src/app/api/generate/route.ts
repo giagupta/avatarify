@@ -2,12 +2,18 @@ import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 export async function POST(request: Request) {
+  console.log('API route called');
+  
+  // Check for API key
   if (!process.env.OPENAI_API_KEY) {
+    console.error('OpenAI API key is missing');
     return NextResponse.json(
       { error: 'OpenAI API key is not configured' },
       { status: 500 }
     );
   }
+  
+  console.log('API key found, length:', process.env.OPENAI_API_KEY.length);
 
   try {
     const formData = await request.formData();

@@ -109,7 +109,7 @@ export default function Home() {
         <div className="flex flex-col items-center gap-6 w-full max-w-xl mx-auto bg-white/5 p-8 rounded border border-white/10 backdrop-blur-sm relative">
           {image && !result && (
             <div className="absolute top-4 left-4 right-4 flex justify-center">
-              <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-gray-100">
+              <div className="relative w-32 h-32 overflow-hidden">
                 <Image src={image} alt="Captured" width={128} height={128} className="w-full h-full object-cover" />
               </div>
             </div>
