@@ -20,13 +20,18 @@ export default function Home() {
   const webcamRef = useRef<Webcam>(null);
 
   const capturePhoto = async () => {
-    const photo = webcamRef.current?.getScreenshot();
-    if (photo) {
-      setImage(photo);
-      // Convert base64 to blob
-      const res = await fetch(photo);
-      const blob = await res.blob();
-      await generateAvatar(blob);
+    try {
+      const photo = webcamRef.current?.getScreenshot();
+      if (photo) {
+        setImage(photo);
+        // Convert base64 to blob
+        const res = await fetch(photo);
+        const blob = await res.blob();
+        await generateAvatar(blob);
+      }
+    } catch (err) {
+      console.error('Error capturing photo:', err);
+      setError('Error capturing photo. Please try again.');
     }
   };
 
@@ -54,7 +59,20 @@ export default function Home() {
         body: formData,
       });
 
-      const data = await response.json();
+      // Check if response is empty
+      const responseText = await response.text();
+      if (!responseText) {
+        throw new Error('Empty response from server');
+      }
+
+      // Try to parse the JSON
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (jsonError) {
+        console.error('JSON parsing error:', jsonError, 'Response text:', responseText);
+        throw new Error('Invalid response from server. Check if your API key is configured properly.');
+      }
       
       if (!response.ok) {
         throw new Error(data.error || 'Failed to generate avatar');
@@ -128,13 +146,17 @@ export default function Home() {
 
           {mode === 'camera' && (
             <div className="text-center mt-8">
-              <div className="relative rounded-xl overflow-hidden mb-4 border-2 border-gray-100">
+              <div className="relative mb-4">
                 <Webcam
                   ref={webcamRef}
                   screenshotFormat="image/jpeg"
-                  className="rounded-lg"
+                  className="w-full"
+                  videoConstraints={{
+                    width: 500,
+                    height: 375,
+                    facingMode: "user"
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
               </div>
               <button
                 onClick={capturePhoto}
