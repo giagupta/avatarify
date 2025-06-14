@@ -57,7 +57,7 @@ export async function POST(request: Request) {
             },
             { 
               type: 'text', 
-              text: 'Describe this person for an ultra-minimalist Notion-style avatar. Focus ONLY on the most distinctive features: face shape, hairstyle (shape, length, color), glasses if any, and any truly defining facial characteristics. Keep the description very brief and focused on what makes them recognizable in an extremely simplified form. The description will be used to create a minimalist black and white avatar with very few details.'
+              text: 'Describe this person for a cartoon-style Notion avatar. Focus on: face shape, hairstyle details (style, length, volume, how it frames the face), facial expression, eyebrows, eye shape, glasses if any, facial hair if any, and any distinctive features that make them recognizable. The description will be used to create a black and white cartoon-style avatar with simple but expressive features. Pay special attention to what makes their appearance unique.'
             }
           ]
         }
@@ -79,21 +79,24 @@ export async function POST(request: Request) {
 
     // Now generate the avatar with DALL-E
     console.log('Generating avatar with DALL-E...');
-    const prompt = `Create an extremely minimalist avatar in the exact style of the Notion avatar examples, based on this person's description: ${description}
+    const prompt = `Create a cartoon-style avatar in the exact style of the Notion avatar examples, based on this person's description: ${description}
 
 STYLE REQUIREMENTS (EXTREMELY IMPORTANT):
-1. Ultra-minimalist black and white design - mostly solid black shapes on white background
-2. Simple, rounded face shape with minimal features
-3. Eyes should be very simple curved lines or small shapes
-4. Mouth is just a simple curved line
-5. Hair should be a solid black shape framing the face
-6. If glasses are present, use simple round or oval outlines
-7. No nose or only the tiniest suggestion of one
-8. No shading, gradients, or unnecessary details
+1. Black and white cartoon style with clean lines and solid black fills
+2. More expressive and detailed than ultra-minimalist style
+3. Face should have simple but distinct features:
+   - Eyes can be small dots, lines, or simple shapes with eyebrows when appropriate
+   - Mouth should show expression (smile, neutral, etc.)
+   - Simple nose representation (small dots or lines)
+   - Ears when visible from the angle
+4. Hair should be a distinct black shape with some internal detail/lines to suggest texture
+5. Include glasses, facial hair, or other distinctive features if present
+6. Head/shoulders composition in a square frame
+7. Clean white background with no borders
 
-The avatar must look exactly like the Notion-style avatars - extremely simple, almost icon-like, but still capturing the person's key features (hair style, glasses, etc.). The face should be centered in a white background with good margins around it. Create just ONE avatar, not multiple variations.
+The avatar must look exactly like the Notion cartoon avatars - simple black and white illustrations with personality and expression. Create just ONE avatar centered in the frame.
 
-Reference style: A minimalist black and white avatar with a simple rounded face, curved line eyes, simple smile, and solid black hair shape.`;
+Reference style: Black and white cartoon-style avatars with expressive faces, distinct hairstyles, and simple but recognizable facial features.`;
     
     console.log('DALL-E prompt:', prompt);
 
@@ -104,7 +107,7 @@ Reference style: A minimalist black and white avatar with a simple rounded face,
       size: '1024x1024',
       response_format: 'url',
       quality: 'standard',
-      style: 'natural'
+      style: 'vivid'
     });
 
     if (!imageResponse.data?.[0]?.url) {
