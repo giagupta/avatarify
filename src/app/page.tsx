@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import Webcam from 'react-webcam';
 import { CameraIcon, PhotoIcon } from '@heroicons/react/24/outline';
@@ -40,8 +39,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+
+
 
   const webcamRef = useRef<Webcam>(null);
 
