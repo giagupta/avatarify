@@ -14,7 +14,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
+  const [cameraActive, setCameraActive] = useState<boolean>(true);
 
 
   const webcamRef = useRef<Webcam>(null);
@@ -24,6 +24,7 @@ export default function Home() {
       const photo = webcamRef.current?.getScreenshot();
       if (photo) {
         setImage(photo);
+        setCameraActive(false); // Freeze the camera view
         // Convert base64 to blob
         const res = await fetch(photo);
         const blob = await res.blob();
@@ -107,13 +108,6 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center gap-6 w-full max-w-xl mx-auto bg-white/5 p-8 rounded border border-white/10 backdrop-blur-sm relative">
-          {image && !result && (
-            <div className="absolute top-4 left-4 right-4 flex justify-center">
-              <div className="relative w-32 h-32 overflow-hidden">
-                <Image src={image} alt="Captured" width={128} height={128} className="w-full h-full object-cover" />
-              </div>
-            </div>
-          )}
           {!mode && (
             <div className="flex gap-4 mb-8">
               <button
@@ -147,23 +141,35 @@ export default function Home() {
           {mode === 'camera' && (
             <div className="text-center mt-8">
               <div className="relative mb-4">
-                <Webcam
-                  ref={webcamRef}
-                  screenshotFormat="image/jpeg"
-                  className="w-full"
-                  videoConstraints={{
-                    width: 500,
-                    height: 375,
-                    facingMode: "user"
-                  }}
-                />
+                {cameraActive ? (
+                  <Webcam
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    className="w-full"
+                    videoConstraints={{
+                      width: 500,
+                      height: 375,
+                      facingMode: "user"
+                    }}
+                  />
+                ) : (
+                  image && (
+                    <div className="relative">
+                      <img src={image} alt="Captured" className="w-full" />
+                    </div>
+                  )
+                )}
               </div>
               <button
-                onClick={capturePhoto}
+                onClick={cameraActive ? capturePhoto : () => {
+                  setCameraActive(true);
+                  setImage(null);
+                  setError(null);
+                }}
                 className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2 mx-auto"
               >
                 <CameraIcon className="w-5 h-5" />
-                Take Photo
+                {cameraActive ? 'Take Photo' : 'Retake Photo'}
               </button>
             </div>
           )}

@@ -79,27 +79,17 @@ export async function POST(request: Request) {
 
     // Now generate the avatar with DALL-E
     console.log('Generating avatar with DALL-E...');
-    const prompt = `Create a minimalist Notion-style avatar that looks hand-drawn. The style should be extremely simple black and white illustration, similar to these key characteristics:
+    const prompt = `Create a single, minimalist avatar in a clean, modern black and white illustration style. The image should be a portrait of a person based on this description: ${description}
 
-ESSENTIAL STYLE:
-1. Completely flat black and white only - no gradients or gray tones
-2. Face shape is often implied rather than outlined
-3. Eyes are super simple - just curved lines, dots, or basic shapes
-4. Mouth is a simple line or curve showing expression
-5. Hair should be bold black shapes with clean edges
-6. If glasses present, use basic round or rectangular frames
-7. Minimal to no facial details - omit nose unless absolutely necessary
+STYLE REQUIREMENTS:
+1. Pure black lines on white background
+2. Clean, crisp lines with no gradients
+3. Minimalist aesthetic but with enough detail to be recognizable
+4. Face should be centered in a square frame
+5. Include distinctive features like glasses, facial hair, or hairstyle if mentioned
+6. Simple, elegant composition
 
-CRITICAL REQUIREMENTS:
-- Must be pure black (#000000) on white (#FFFFFF) background
-- Absolutely no outlines around the face
-- No shading or gradients whatsoever
-- Asymmetrical features are encouraged for character
-- Keep details to absolute minimum - less is more
-- Should look casually hand-drawn, not digital or perfect
-- Aim for a friendly, approachable feel
-
-The final result should look like a simple doodle that captures personality with just a few strokes - similar to Notion's avatar style.`;
+The final result should be a single portrait in a square frame, not multiple variations or a grid of faces. Create just ONE avatar that looks professional and elegant.`;
     
     console.log('DALL-E prompt:', prompt);
 
