@@ -1,37 +1,12 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import Webcam from 'react-webcam';
 import { CameraIcon, PhotoIcon } from '@heroicons/react/24/outline';
 
-const exampleAvatars = [
-  '/examples/notion1.png',
-  '/examples/notion2.png',
-  '/examples/notion3.png',
-  '/examples/notion4.png',
-  // Add more example avatar paths
-];
 
-const FloatingAvatars = () => (
-  <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    <div className="absolute inset-0 opacity-[0.03]">
-      {Array.from({ length: 20 }).map((_, i) => (
-        <div
-          key={i}
-          className="absolute transform -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            transform: `scale(${0.5 + Math.random() * 0.5}) rotate(${Math.random() * 360}deg)`,
-          }}
-        >
-          <div className="w-24 h-24 bg-black rounded-full" />
-        </div>
-      ))}
-    </div>
-  </div>
-);
 
 export default function Home() {
   const [mode, setMode] = useState<'upload' | 'camera' | null>(null);
@@ -90,9 +65,10 @@ export default function Home() {
       }
 
       setResult(data.url);
-    } catch (error: any) {
-      console.error('Error generating avatar:', error);
-      setError(error.message || 'Failed to generate avatar. Please try again.');
+    } catch (error) {
+      const err = error as Error;
+      console.error('Error generating avatar:', err);
+      setError(err.message || 'Failed to generate avatar. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -116,7 +92,7 @@ export default function Home() {
           {image && !result && (
             <div className="absolute top-4 left-4 right-4 flex justify-center">
               <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-gray-100">
-                <img src={image} alt="Captured" className="w-full h-full object-cover" />
+                <Image src={image} alt="Captured" width={128} height={128} className="w-full h-full object-cover" />
               </div>
             </div>
           )}
@@ -188,7 +164,7 @@ export default function Home() {
               <div className="relative group">
                 <div className="absolute -inset-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl opacity-20 group-hover:opacity-30 transition-opacity blur"></div>
                 <div className="relative bg-white p-4 rounded-lg">
-                  <img src={result} alt="Generated avatar" className="max-w-xs mx-auto" />
+                  <Image src={result} alt="Generated avatar" width={256} height={256} className="max-w-xs mx-auto" />
                 </div>
               </div>
               <a
