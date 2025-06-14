@@ -57,7 +57,7 @@ export async function POST(request: Request) {
             },
             { 
               type: 'text', 
-              text: 'Describe this person for a cartoon-style Notion avatar. Focus on: face shape, hairstyle details (style, length, volume, how it frames the face), facial expression, eyebrows, eye shape, glasses if any, facial hair if any, and any distinctive features that make them recognizable. The description will be used to create a black and white cartoon-style avatar with simple but expressive features. Pay special attention to what makes their appearance unique.'
+              text: 'Describe this person for a minimalist Notion-style avatar. Focus ONLY on: overall face shape, hairstyle (shape and how it frames the face), basic facial expression (smiling, neutral, etc.), presence of glasses, and any truly distinctive features. DO NOT include details about texture, highlights, or shading. Keep the description very simple and focused on the key elements needed for a minimalist black and white illustration with clean lines and solid shapes. The description will be used to create a Notion-style avatar with very minimal facial features.'
             }
           ]
         }
@@ -79,30 +79,35 @@ export async function POST(request: Request) {
 
     // Now generate the avatar with DALL-E
     console.log('Generating avatar with DALL-E...');
-    const prompt = `Create a cartoon-style avatar in the exact style of the Notion avatar examples, based on this person's description: ${description}
+    const prompt = `Create a Notion-style avatar illustration based on this person's description: ${description}
 
 STYLE REQUIREMENTS (EXTREMELY IMPORTANT):
-1. Black and white cartoon style with clean lines and solid black fills
-2. More expressive and detailed than ultra-minimalist style
-3. Face should have simple but distinct features:
-   - Eyes can be small dots, lines, or simple shapes with eyebrows when appropriate
-   - Mouth should show expression (smile, neutral, etc.)
-   - Simple nose representation (small dots or lines)
-   - Ears when visible from the angle
-4. Hair should be a distinct black shape with some internal detail/lines to suggest texture
-5. Include glasses, facial hair, or other distinctive features if present
-6. Head/shoulders composition in a square frame
-7. Clean white background with no borders
+1. Pure black and white illustration with NO gray tones, NO highlights, and NO shading
+2. ABSOLUTELY NO BORDERS OR FRAMES around the avatar - just the face/head on white background
+3. Specific Notion-style facial features:
+   - Eyes: simple curved lines or small ovals, never large cartoon eyes
+   - Eyebrows: thin, simple lines
+   - Nose: minimal representation or often omitted entirely
+   - Mouth: simple curved line for smile or neutral expression
+4. Hair must be solid black with NO internal lines, NO highlights, and NO texture details
+5. If glasses present, use thin, simple lines
+6. Just show head and possibly neck/shoulders - no full body
+7. Clean white background with absolutely no borders, frames, or decorative elements
 
-The avatar must look exactly like the Notion cartoon avatars - simple black and white illustrations with personality and expression. Create just ONE avatar centered in the frame.
+The avatar must look EXACTLY like the authentic Notion avatars - clean, simple black and white illustrations with minimal details. Create just ONE avatar centered in the frame.
 
-Reference style: Black and white cartoon-style avatars with expressive faces, distinct hairstyles, and simple but recognizable facial features.`;
+Reference style: Simple black and white head illustrations with minimal facial features, solid black hair with no highlights, and clean white backgrounds with no frames.`;
     
     console.log('DALL-E prompt:', prompt);
 
+    // Add a final reminder about no borders or frames
+    const finalPrompt = `${prompt}\n\nFINAL CRITICAL INSTRUCTIONS:\n1. The background MUST be pure white (#FFFFFF) with NO borders, frames, or backgrounds of any kind.\n2. The avatar must be just the head/face floating on a white background.\n3. DO NOT add any decorative elements, borders, or frames.\n4. Hair must be solid black with no internal lines or highlights.\n5. Facial features must be extremely minimal - simple lines for eyes and mouth.`;
+    
+    console.log('Final prompt:', finalPrompt);
+    
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
-      prompt,
+      prompt: finalPrompt,
       n: 1,
       size: '1024x1024',
       response_format: 'url',
